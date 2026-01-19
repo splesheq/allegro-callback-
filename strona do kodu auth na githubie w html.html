@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Allegro OAuth Callback</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 40px;
+    }
+    .box {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    code {
+      display: block;
+      background: #eee;
+      padding: 10px;
+      margin-top: 10px;
+      word-break: break-all;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Allegro OAuth – Callback</h1>
+    <div id="content">Oczekiwanie na dane…</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const error = params.get("error");
+
+    const content = document.getElementById("content");
+
+    if (error) {
+      content.innerHTML = `
+        <p class="error"><strong>Błąd autoryzacji:</strong> ${error}</p>
+      `;
+    } else if (code) {
+      localStorage.setItem("allegro_auth_code", code);
+
+      content.innerHTML = `
+        <p><strong>Kod autoryzacyjny odebrany 🎉</strong></p>
+        <p>Code:</p>
+        <code>${code}</code>
+        <p>➡️ Kod został zapisany w <code>localStorage</code> przeglądarki.</p>
+      `;
+    } else {
+      content.innerHTML = `
+        <p>Brak parametrów OAuth w URL.</p>
+      `;
+    }
+  </script>
+</body>
+</html>
